@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ArrowLeft, QrCode, User, Search } from 'lucide-react-native';
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
+import { mockEmployees } from '../utils/dummyData/employeeData';
 
 const { width, height } = Dimensions.get('window');
 
@@ -40,10 +41,16 @@ export default function AttendanceScreen() {
             return;
         }
 
+        // Validate employeeId against mockEmployees
+        if (!mockEmployees[employeeId.trim()]) {
+            Alert.alert('Error', 'Invalid Employee ID. Please try again.');
+            return;
+        }
+
         // Navigate to employee details with the ID
         router.push({
             pathname: '/employee-details',
-            params: { employeeId: employeeId.trim() }
+            params: { employeeId: employeeId.trim() },
         });
     };
 
@@ -104,7 +111,7 @@ export default function AttendanceScreen() {
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.textInput}
-                            placeholder="Enter employee ID"
+                            placeholder="Enter employee ID (e.g., RSOT1001)"
                             value={employeeId}
                             onChangeText={setEmployeeId}
                             placeholderTextColor="#9ca3af"
@@ -152,6 +159,7 @@ export default function AttendanceScreen() {
     );
 }
 
+// Styles remain unchanged
 const styles = StyleSheet.create({
     container: {
         flex: 1,
